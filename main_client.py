@@ -88,6 +88,9 @@ def main():
 ##    c.send(game)
     print("======================")
 
+    Player_Number = client.recv(16)
+    print("your player number is %d" % Player_Number)
+    
     currentPlayer = 0
     c.send(currentPlayer)
     displayGame(game, currentPlayer)

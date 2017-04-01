@@ -101,13 +101,11 @@ def main():
         for connexion in connexions_demandees:
             if connexion is server:
                 connexion_avec_client, infos_connexion = connexion.accept()
-            else:
-                data = s.recv(1024)
                 # On ajoute la socket connecté à la liste des clients
-            clients_connectes.append(connexion_avec_client)
+                clients_connectes.append(connexion_avec_client)
 
         #Les premiers clients connectés sont les joueurs on leur envoit les infos sur la table de jeux et leur numero de joueurs
-        if len(connexions_demandees) != 0:
+        if len(connexions_demandees) == 2:
             print(" %s joueur(s) connecté(s)" % len(connexions_demandees))
             clients_connectes[0].send(str(0).encode('utf-8'))
             clients_connectes[1].send(str(1).encode('utf-8'))
