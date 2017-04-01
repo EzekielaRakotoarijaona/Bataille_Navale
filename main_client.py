@@ -79,6 +79,7 @@ def main():
     server_address = ('',7777)
     print("Connection au server distant sur le port 7777")
     client.connect(server_address)
+    print("Vous êtes connecté au serveur de jeu")
     
 ##    boats1 = randomConfiguration()
 ##    boats2 = randomConfiguration()
