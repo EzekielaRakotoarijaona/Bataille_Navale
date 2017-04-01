@@ -93,30 +93,26 @@ def main():
         # On ajoute le socket connecté à la liste des clients
         clients_connectes.append(connexion_avec_client)
 
-    # Maintenant, on écoute la liste des clients connectés
-    # Les clients renvoyés par select sont ceux devant être lus (recv)
-    # On attend là encore 50ms maximum
-    # On enferme l'appel à select.select dans un bloc try
-    # En effet, si la liste de clients connectés est vide, une exception
-    # Peut être levée
-    clients_a_lire = []
-    try:
-        clients_a_lire, wlist, xlist = select.select(clients_connectes,
-                [], [], 0.05)
-    except select.error:
-        pass
-    
-    c.send(game)
-    currentPlayer = 0
-    c.send(currentPlayer)
-    while gameOver(game) == -1:
-        (c,a) = data.accept()
-        (x,y,currentPlayer) = c.recv(1500)
-        
-        if (currentPlayer == J0):
-            c.send((x,y,currenPlayer+1))
-        else:
-            c.send((x,y,currentPlayer+1))
-        addShot(game, x, y, currentPlayer)
+    client_connectes[0].send((game,0,True))
+    client_connectes[1].send((game,1,False))
 
+    currentPlayer = 0
+    
+    while gameOver(game) == -1:        
+        if (currentPlayer == J0):
+            (x,y) = client_connectes[0].recv(1500)
+            addShot(game, x, y, currentPlayer)
+            client_connectes[1].send((x,y,True))
+            currentPlayer = (currentPlayer+1)%2
+        else:
+            (x,y) = client_connectes[1].recv(1500)
+            addShot(game, x, y, currentPlayer)
+            client_connectes[0].send((x,y,True))
+            currentPlayer = (currentPlayer+1)%2
+            
+    #Fin du jeu et fermeture des connexions
+    for client in clients_connectes:
+        client.close()
+    data.close()
+    
 main()
