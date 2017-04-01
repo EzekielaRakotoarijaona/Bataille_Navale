@@ -93,21 +93,25 @@ def main():
         # On ajoute le socket connecté à la liste des clients
         clients_connectes.append(connexion_avec_client)
 
-    client_connectes[0].send((game,0,True))
-    client_connectes[1].send((game,1,False))
+    #Les premiers clients connectés sont les joueurs on leur envoit les infos sur la table de jeux et leur numero de joueurs
+    client_connectes[0].send((game,0))
+    client_connectes[1].send((game,1))
 
+    #Pour commencer on defini le joueur du serveur à 0 
     currentPlayer = 0
     
     while gameOver(game) == -1:        
         if (currentPlayer == J0):
+            #Si c'est le tour du joueur 0 on attend les coordonées qu il a joue et on les envoie au joueur 1
             (x,y) = client_connectes[0].recv(1500)
             addShot(game, x, y, currentPlayer)
-            client_connectes[1].send((x,y,True))
+            client_connectes[1].send((x,y))
             currentPlayer = (currentPlayer+1)%2
         else:
+            #Si c'est le tour du joueur 1 on attend les coordonées qu il a joue et on les envoie au joueur 0
             (x,y) = client_connectes[1].recv(1500)
             addShot(game, x, y, currentPlayer)
-            client_connectes[0].send((x,y,True))
+            client_connectes[0].send((x,y))
             currentPlayer = (currentPlayer+1)%2
             
     #Fin du jeu et fermeture des connexions
