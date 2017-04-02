@@ -81,9 +81,9 @@ def main():
     client.connect(server_address)
     print("Vous êtes connecté au serveur de jeu")
     
-##    boats1 = randomConfiguration()
-##    boats2 = randomConfiguration()
-##    game = Game(boats1, boats2)
+    boats1 = randomConfiguration()
+    boats2 = randomConfiguration()
+    game = Game(boats1, boats2)
 ##    displayGame(game, 0)
 ##    (c,a) = .accept()
 ##    c.send(game)
@@ -92,12 +92,9 @@ def main():
     Player_Number = client.recv(16)
     print("your player number is %s" % repr(Player_Number))
     
-    currentPlayer = 0
-    c.send(currentPlayer)
-    displayGame(game, currentPlayer)
+    displayGame(game, int(Player_Number))
     while gameOver(game) == -1:
         print("======================")
-        (c,a) = data.accept()
         if currentPlayer == J0:
             x_char = input ("quelle colonne ? ")
             x_char.capitalize()
