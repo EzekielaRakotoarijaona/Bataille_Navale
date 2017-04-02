@@ -105,8 +105,9 @@ def main():
             client.send(str(y).encode('utf-8'))
             addShot(game, x, y, currentPlayer)
         else:
-            x = client.recv(1500)
-            y = client.recv(1500)
+            print("L'autre joueur joue son coup ...")
+            x = client.recv(1)
+            y = client.recv(1)
             time.sleep(1)
             addShot(game, int(x), int(y), currentPlayer)
         displayGame(game, int(Player_Number))
