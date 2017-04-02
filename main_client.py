@@ -101,7 +101,8 @@ def main():
             x_char.capitalize()
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne ? "))
-            client.send((x,y))
+            client.send(str(x).encode('utf-8'))
+            client.send(str(y).encode('utf-8'))
         else:
             (x,y) = client.recv(1500)
             time.sleep(1)
