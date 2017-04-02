@@ -116,19 +116,13 @@ def main():
             while gameOver(game) == -1:        
                 if (currentPlayer == J0):
                     #Si c'est le tour du joueur 0 on attend les coordonées qu il a joue et on les envoie au joueur 1
-                    try:
-                        x = clients_connectes[0].recv(1)
-                        y = clients_connectes[0].recv(1)
-                        print("message recu")
-                    except TimeoutException:
-                        print("Timeout!!! Try again...")
-                        continue
+                    x = clients_connectes[0].recv(1)
+                    y = clients_connectes[0].recv(1)
                     addShot(game, int(x), int(y), currentPlayer)
                     clients_connectes[1].send(x)
                     clients_connectes[1].send(y)
                     currentPlayer = (currentPlayer+1)%2
                 else:
-                    print("pouette")
                     #Si c'est le tour du joueur 1 on attend les coordonées qu il a joue et on les envoie au joueur 0
                     x = clients_connectes[1].recv(1)
                     y = clients_connectes[1].recv(1)
