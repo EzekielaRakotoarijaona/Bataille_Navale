@@ -89,24 +89,23 @@ def main():
 
  
     #Attente de connexion
-    clients_connectes = [server]
+    clients_connectes = []
     
-    while clients_connectes:
+    while True:
         # Attente d'une connexion
         print("Attente de joueurs ..")
         
         #On récupère les sockets disponibles en lecture
-        connexions_demandees, wlist, xlist = select.select(clients_connectes,[], [])
+        connexions_demandees, wlist, xlist = select.select([server],[], [])
     
         for connexion in connexions_demandees:
-            if connexion is server:
-                connexion_avec_client, infos_connexion = connexion.accept()
-                # On ajoute la socket connecté à la liste des clients
-                clients_connectes.append(connexion_avec_client)
+            connexion_avec_client, infos_connexion = connexion.accept()
+            # On ajoute la socket connecté à la liste des clients
+            clients_connectes.append(connexion_avec_client)
 
         #Les premiers clients connectés sont les joueurs on leur renvoit les infos sur la table de jeux et leur numero de joueurs
-        if len(connexions_demandees) == 2:
-            print(" %s joueur(s) connecté(s)" % len(connexions_demandees))
+        if len(clients_connectes) == 2:
+            print(" %s joueur(s) connecté(s)" % len(clients_connectes))
             clients_connectes[0].send(str(0).encode('utf-8'))
             clients_connectes[1].send(str(1).encode('utf-8'))
 
