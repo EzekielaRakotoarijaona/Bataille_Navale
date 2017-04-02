@@ -103,12 +103,13 @@ def main():
             y = int(input ("quelle ligne ? "))
             client.send(str(x).encode('utf-8'))
             client.send(str(y).encode('utf-8'))
+            addShot(game, x, y, currentPlayer)
         else:
             x = client.recv(1500)
             y = client.recv(1500)
             time.sleep(1)
-        addShot(game, x, y, currentPlayer)
-        displayGame(game, 0)
+            addShot(game, int(x), int(y), currentPlayer)
+        displayGame(game, int(Player_Number))
         currentPlayer = (currentPlayer+1)%2
     print("game over")
     print("your grid :")
