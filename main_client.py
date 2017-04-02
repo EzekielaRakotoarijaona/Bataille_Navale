@@ -90,9 +90,10 @@ def main():
     print("======================")
 
     Player_Number = client.recv(16)
-    print("your player number is %s" % repr(Player_Number))
+    print("your player number is %d" % int(Player_Number))
     
     displayGame(game, int(Player_Number))
+    currentPlayer = int(Player_Number)
     while gameOver(game) == -1:
         print("======================")
         if currentPlayer == J0:
@@ -100,9 +101,9 @@ def main():
             x_char.capitalize()
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne ? "))
-            c.send((x,y))
+            client.send((x,y))
         else:
-            (x,y) = c.recv(1500)
+            (x,y) = client.recv(1500)
             time.sleep(1)
         addShot(game, x, y, currentPlayer)
         displayGame(game, 0)
