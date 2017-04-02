@@ -104,7 +104,8 @@ def main():
             client.send(str(x).encode('utf-8'))
             client.send(str(y).encode('utf-8'))
         else:
-            (x,y) = client.recv(1500)
+            x = client.recv(1500)
+            y = client.recv(1500)
             time.sleep(1)
         addShot(game, x, y, currentPlayer)
         displayGame(game, 0)
