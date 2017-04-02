@@ -90,7 +90,7 @@ def main():
     print("======================")
 
     Player_Number = client.recv(16)
-    print("your player number is %d" % Player_Number)
+    print("your player number is %s" % repr(Player_Number))
     
     currentPlayer = 0
     c.send(currentPlayer)
