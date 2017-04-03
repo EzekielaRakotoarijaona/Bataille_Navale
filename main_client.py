@@ -4,6 +4,7 @@ from game import *
 import  random
 import time
 import socket
+import pickle
 
 
 
@@ -83,13 +84,15 @@ def main():
     
     boats1 = randomConfiguration()
     boats2 = randomConfiguration()
-    game = Game(boats1, boats2)
+##    game = Game(boats1, boats2)
 ##    displayGame(game, 0)
 ##    (c,a) = .accept()
 ##    c.send(game)
     print("======================")
 
-    Player_Number = client.recv(16)
+    Player_Number = client.recv(1)
+    g = client.recv(5)
+    game = g.decode('utf-8')
     print("your player number is %d" % int(Player_Number))
     
     displayGame(game, int(Player_Number))

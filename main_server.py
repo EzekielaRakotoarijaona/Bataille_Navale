@@ -5,6 +5,7 @@ import  random
 import time
 import socket
 import select
+import pickle
 
 
 
@@ -108,7 +109,9 @@ def main():
             print(" %s joueur(s) connecté(s)" % len(clients_connectes))
             clients_connectes[0].send(str(0).encode('utf-8'))
             clients_connectes[1].send(str(1).encode('utf-8'))
-
+            clients_connectes[0].send(str(game).encode('utf-8'))
+            clients_connectes[1].send(str(game).encode('utf-8'))
+            
             #Pour commencer on defini le joueur du serveur à 0 
             currentPlayer = 0
             
