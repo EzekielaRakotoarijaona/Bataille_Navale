@@ -72,6 +72,16 @@ def randomNewShot(shots):
         (x,y) = (random.randint(1,10), random.randint(1,10))
     return (x,y)
 
+def receiveBoat(client):
+    boats = []
+    for i in range(5):
+        x = int(client.recv(1))
+        y = int(client.recv(1))
+        isHorizontal = client.recv(1)
+        isHorizontal = isHorizontal == 0
+        boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+    return boats
+    
 def main():
     #Création de la socket TCP/IP
     client = socket.socket(family = socket.AF_INET6, type = socket.SOCK_STREAM, proto = 0, fileno = None)
@@ -81,18 +91,17 @@ def main():
     print("Connection au server distant sur le port 7777")
     client.connect(server_address)
     print("Vous êtes connecté au serveur de jeu")
-    
-    boats1 = randomConfiguration()
-    boats2 = randomConfiguration()
-##    game = Game(boats1, boats2)
+
+    Player_Number = client.recv(1)
+    boats1 = receiveBoat(client)
+    boats2 = receiveBoat(client)
+    game = Game(boats1, boats2)
 ##    displayGame(game, 0)
 ##    (c,a) = .accept()
 ##    c.send(game)
     print("======================")
 
-    Player_Number = client.recv(1)
-    g = client.recv(5)
-    game = g.decode('utf-8')
+    
     print("your player number is %d" % int(Player_Number))
     
     displayGame(game, int(Player_Number))
@@ -109,8 +118,8 @@ def main():
             addShot(game, x, y, currentPlayer)
         else:
             print("L'autre joueur joue son coup ...")
-            x = client.recv(1)
-            y = client.recv(1)
+            x = client.recv(5)
+            y = client.recv(5)
             time.sleep(1)
             addShot(game, int(x), int(y), currentPlayer)
         displayGame(game, int(Player_Number))

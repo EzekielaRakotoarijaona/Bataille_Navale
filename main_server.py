@@ -13,15 +13,23 @@ import pickle
 
 
 """ generate a random valid configuration """
-def randomConfiguration():
+def randomConfiguration(clients_connectes):
     boats = [];
     while not isValidConfiguration(boats):
         boats=[]
         for i in range(5):
             x = random.randint(1,10)
+            clients_connectes[0].sendall(str(x).encode('utf-8'))
+            clients_connectes[1].sendall(str(x).encode('utf-8'))
             y = random.randint(1,10)
-            isHorizontal = random.randint(0,1) == 0
+            clients_connectes[0].sendall(str(y).encode('utf-8'))
+            clients_connectes[1].sendall(str(y).encode('utf-8'))
+            isHorizontal = random.randint(0,1)
+            clients_connectes[0].sendall(str(isHorizontal).encode('utf-8'))
+            clients_connectes[1].sendall(str(isHorizontal).encode('utf-8'))
+            isHorizontal = isHorizontal == 0
             boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+            
     return boats
 
     
@@ -75,10 +83,6 @@ def randomNewShot(shots):
 
 def main():
     
-    boats1 = randomConfiguration()
-    boats2 = randomConfiguration()
-    game = Game(boats1, boats2)
-    
     #création de socket TCP
     server = socket.socket(family = socket.AF_INET6, type = socket.SOCK_STREAM, proto = 0, fileno = None)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -106,11 +110,14 @@ def main():
 
         #Les premiers clients connectés sont les joueurs on leur renvoit les infos sur la table de jeux et leur numero de joueurs
         if len(clients_connectes) == 2:
+            clients_connectes[0].sendall(str(0).encode('utf-8'))
+            clients_connectes[1].sendall(str(1).encode('utf-8'))
+            boats1 = randomConfiguration(clients_connectes)
+            boats2 = randomConfiguration(clients_connectes)
+            game = Game(boats1, boats2)
             print(" %s joueur(s) connecté(s)" % len(clients_connectes))
-            clients_connectes[0].send(str(0).encode('utf-8'))
-            clients_connectes[1].send(str(1).encode('utf-8'))
-            clients_connectes[0].send(str(game).encode('utf-8'))
-            clients_connectes[1].send(str(game).encode('utf-8'))
+            
+            
             
             #Pour commencer on defini le joueur du serveur à 0 
             currentPlayer = 0
