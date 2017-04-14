@@ -5,7 +5,7 @@ import  random
 import time
 import socket
 import select
-import pickle
+import sys
 
 
 
@@ -81,7 +81,75 @@ def randomNewShot(shots):
         (x,y) = (random.randint(1,10), random.randint(1,10))
     return (x,y)
 
+def receiveBoat(client):
+    boats = []
+    for i in range(5):
+        x = int(client.recv(1))
+        y = int(client.recv(1))
+        isHorizontal = client.recv(1)
+        isHorizontal = isHorizontal == 0
+        boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+    return boats
+    
+def main_client(x):
+    #Création de la socket TCP/IP
+    client = socket.socket(family = socket.AF_INET6, type = socket.SOCK_STREAM, proto = 0, fileno = None)
+
+    #On connecte la nouvelle socket client au port où le server "écoute"
+    server_address = (x,7777)
+    print("Connection au server distant sur le port 7777")
+    client.connect(server_address)
+    print("Vous êtes connecté au serveur de jeu")
+
+    Player_Number = client.recv(1)
+    boats1 = receiveBoat(client)
+    boats2 = receiveBoat(client)
+    game = Game(boats1, boats2)
+##    displayGame(game, 0)
+##    (c,a) = .accept()
+##    c.send(game)
+    print("======================")
+
+    
+    print("your player number is %d" % int(Player_Number))
+    
+    displayGame(game, int(Player_Number))
+    currentPlayer = int(Player_Number)
+    while gameOver(game) == -1:
+        print("======================")
+        if currentPlayer == J0:
+            x_char = input ("quelle colonne ? ")
+            x_char.capitalize()
+            x = ord(x_char)-ord("A")+1
+            y = int(input ("quelle ligne ? "))
+            client.send(str(x).encode('utf-8'))
+            client.send(str(y).encode('utf-8'))
+            addShot(game, x, y, currentPlayer)
+        else:
+            print("L'autre joueur joue son coup ...")
+            x = client.recv(5)
+            y = client.recv(5)
+            time.sleep(1)
+            addShot(game, int(x), int(y), currentPlayer)
+        displayGame(game, int(Player_Number))
+        currentPlayer = (currentPlayer+1)%2
+    print("game over")
+    print("your grid :")
+    displayGame(game, J0)
+    print("the other grid :")
+    displayGame(game, J1)
+
+    if gameOver(game) == J0:
+        print("You win !")
+    else:
+        print("you loose !")
+
+
 def main():
+
+    if len(sys.argv) >1:
+        main_client(sys.argv[1])
+        return
     
     #création de socket TCP
     server = socket.socket(family = socket.AF_INET6, type = socket.SOCK_STREAM, proto = 0, fileno = None)
@@ -145,5 +213,7 @@ def main():
             for client in clients_connectes:
                 client.close()
             server.close()
+
+            
     
 main()
