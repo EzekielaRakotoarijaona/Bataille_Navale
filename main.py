@@ -19,11 +19,11 @@ def randomConfiguration(clients_connectes):
         boats=[]
         tab = []
         for i in range(5):
-            x = random.randint(1,9)
-            y = random.randint(1,9)
+            x = random.randint(0,9)
+            y = random.randint(0,9)
             isHorizontalint = random.randint(0,1)
             isHorizontal = isHorizontalint == 0
-            boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+            boats = boats + [Boat(x+1,y+1,LENGTHS_REQUIRED[i],isHorizontal)]
             tab = tab + [ x , y , isHorizontalint]
     for i in range (len(tab)):
         clients_connectes[0].sendall(str(tab[i]).encode('utf-8'))
@@ -83,8 +83,8 @@ def randomNewShot(shots):
 def receiveBoat(client):
     boats = []
     for i in range(5):
-        x = int(client.recv(1))
-        y = int(client.recv(1))
+        x = int(client.recv(1)) + 1
+        y = int(client.recv(1)) + 1
         isHorizontal = int(client.recv(1))
         isHorizontal = isHorizontal == 0
         boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
@@ -118,19 +118,19 @@ def main_client(x):
         if currentPlayer == J0:
             x_char = input ("quelle colonne ? ")
             x_char.capitalize()
-            x = ord(x_char)-ord("A")+1
-            y = int(input ("quelle ligne ? "))
-            client.send(str(x).encode('utf-8'))
-            client.send(str(y).encode('utf-8'))
+            x = ord(x_char)-ord("A")  + 1
+            y = int(input ("quelle ligne ? "))  
+            client.send(str(x-1).encode('utf-8'))
+            client.send(str(y-1).encode('utf-8'))
             print(currentPlayer)
             addShot(game, x, y, int(Player_Number))
         else:
             print("L'autre joueur joue son coup ...")
-            x = client.recv(1)
-            y = client.recv(1)
+            x = client.recv(1) 
+            y = client.recv(1) 
             time.sleep(1)
             print(currentPlayer)
-            addShot(game, int(x), int(y), (int(Player_Number)+1)%2)
+            addShot(game, int(x)+1, int(y)+1, (int(Player_Number)+1)%2)
         displayGame(game, int(Player_Number))
         currentPlayer = (currentPlayer+1)%2
     print("game over")
