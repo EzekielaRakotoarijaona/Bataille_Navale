@@ -17,18 +17,17 @@ def randomConfiguration(clients_connectes):
     boats = [];
     while not isValidConfiguration(boats):
         boats=[]
+        tab = []
         for i in range(5):
-            x = random.randint(1,10)
-            clients_connectes[0].sendall(str(x).encode('utf-8'))
-            clients_connectes[1].sendall(str(x).encode('utf-8'))
-            y = random.randint(1,10)
-            clients_connectes[0].sendall(str(y).encode('utf-8'))
-            clients_connectes[1].sendall(str(y).encode('utf-8'))
-            isHorizontal = random.randint(0,1)
-            clients_connectes[0].sendall(str(isHorizontal).encode('utf-8'))
-            clients_connectes[1].sendall(str(isHorizontal).encode('utf-8'))
-            isHorizontal = isHorizontal == 0
+            x = random.randint(1,9)
+            y = random.randint(1,9)
+            isHorizontalint = random.randint(0,1)
+            isHorizontal = isHorizontalint == 0
             boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+            tab = tab + [ x , y , isHorizontalint]
+    for i in range (len(tab)):
+        clients_connectes[0].sendall(str(tab[i]).encode('utf-8'))
+        clients_connectes[1].sendall(str(tab[i]).encode('utf-8'))
             
     return boats
 
@@ -86,9 +85,13 @@ def receiveBoat(client):
     for i in range(5):
         x = int(client.recv(1))
         y = int(client.recv(1))
-        isHorizontal = client.recv(1)
+        print(x,y)
+        isHorizontal = int(client.recv(1))
+        print(isHorizontal)
         isHorizontal = isHorizontal == 0
+        print(isHorizontal)
         boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+    
     return boats
     
 def main_client(x):
@@ -184,7 +187,6 @@ def main():
             boats2 = randomConfiguration(clients_connectes)
             game = Game(boats1, boats2)
             print(" %s joueur(s) connecté(s)" % len(clients_connectes))
-            
             
             
             #Pour commencer on defini le joueur du serveur à 0 
