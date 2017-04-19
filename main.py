@@ -85,11 +85,8 @@ def receiveBoat(client):
     for i in range(5):
         x = int(client.recv(1))
         y = int(client.recv(1))
-        print(x,y)
         isHorizontal = int(client.recv(1))
-        print(isHorizontal)
         isHorizontal = isHorizontal == 0
-        print(isHorizontal)
         boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
     
     return boats
@@ -108,9 +105,7 @@ def main_client(x):
     boats1 = receiveBoat(client)
     boats2 = receiveBoat(client)
     game = Game(boats1, boats2)
-##    displayGame(game, 0)
-##    (c,a) = .accept()
-##    c.send(game)
+    
     print("======================")
 
     
@@ -127,13 +122,15 @@ def main_client(x):
             y = int(input ("quelle ligne ? "))
             client.send(str(x).encode('utf-8'))
             client.send(str(y).encode('utf-8'))
-            addShot(game, x, y, currentPlayer)
+            print(currentPlayer)
+            addShot(game, x, y, int(Player_Number))
         else:
             print("L'autre joueur joue son coup ...")
-            x = client.recv(5)
-            y = client.recv(5)
+            x = client.recv(1)
+            y = client.recv(1)
             time.sleep(1)
-            addShot(game, int(x), int(y), currentPlayer)
+            print(currentPlayer)
+            addShot(game, int(x), int(y), (int(Player_Number)+1)%2)
         displayGame(game, int(Player_Number))
         currentPlayer = (currentPlayer+1)%2
     print("game over")
