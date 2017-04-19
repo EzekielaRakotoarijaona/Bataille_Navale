@@ -120,7 +120,7 @@ def main_robot():
 		else:
 			(x,y) = randomNewShot(game.shots[currentPlayer])
 			time.sleep(1)
-			addShot(game, x, y, currentPlayer)
+		addShot(game, x, y, currentPlayer)
 		displayGame(game, 0)
 		currentPlayer = (currentPlayer+1)%2
 	print("game over")
