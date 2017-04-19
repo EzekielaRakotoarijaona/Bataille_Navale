@@ -31,6 +31,18 @@ def randomConfiguration(clients_connectes):
             
     return boats
 
+def randomConfiguration2():
+    boats = [];
+    while not isValidConfiguration(boats):
+        boats=[]
+        for i in range(5):
+            x = random.randint(1,10)
+            y = random.randint(1,10)
+            isHorizontal = random.randint(0,1) == 0
+            boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+    return boats
+
+
     
 
 def displayConfiguration(boats, shots=[], showBoats=True):
@@ -90,18 +102,55 @@ def receiveBoat(client):
         boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
     
     return boats
-    
+def main_robot():
+	boats1 = randomConfiguration2()
+	boats2 = randomConfiguration2()
+	game = Game(boats1, boats2)
+	displayGame(game, 0)
+	print("======================")
+	currentPlayer = 0
+	displayGame(game, currentPlayer)
+	while gameOver(game) == -1:
+		print("======================")
+		if currentPlayer == J0:
+			x_char = input ("quelle colonne ? ")
+			x_char.capitalize()
+			x = ord(x_char)-ord("A")+1
+			y = int(input ("quelle ligne ? "))
+		else:
+			(x,y) = randomNewShot(game.shots[currentPlayer])
+			time.sleep(1)
+			addShot(game, x, y, currentPlayer)
+		displayGame(game, 0)
+		currentPlayer = (currentPlayer+1)%2
+	print("game over")
+	print("your grid :")
+	displayGame(game, J0)
+	print("the other grid :")
+	displayGame(game, J1)
+
+	if gameOver(game) == J0:
+		print("You win !")
+	else:
+		print("you loose !")
+
 def main_client(x):
+    choix = int(input ("Voulez vous jouer en réseau 1-Non 2-Oui: "))
+    if (choix == 1):
+    	main_robot()
+    	return
     #Création de la socket TCP/IP
     client = socket.socket(family = socket.AF_INET6, type = socket.SOCK_STREAM, proto = 0, fileno = None)
 
     #On connecte la nouvelle socket client au port où le server "écoute"
-    server_address = (x,7777)
+    server_address = (x,7778)
     print("Connection au server distant sur le port 7777")
     client.connect(server_address)
     print("Vous êtes connecté au serveur de jeu")
+    print("Attente de joueur ...")
 
     Player_Number = client.recv(1)
+    print("Joueur trouvé")
     boats1 = receiveBoat(client)
     boats2 = receiveBoat(client)
     game = Game(boats1, boats2)
@@ -156,7 +205,7 @@ def main():
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     #Bind la socket au port 7777
     print("Lancement du serveur sur le port 7777")
-    server.bind(('',7777))
+    server.bind(('',7778))
     # "Ecoute" pour les demandes de connections entrantes
     server.listen(5)
 
@@ -164,12 +213,12 @@ def main():
     #Attente de connexion
     clients_connectes = []
     
+    print("Attente de joueur(s) ..")
     while True:
         # Attente d'une connexion
-        print("Attente de joueurs ..")
-        
         #On récupère les sockets disponibles en lecture
         connexions_demandees, wlist, xlist = select.select([server],[], [])
+        print("1 joueur s'est connecté")
     
         for connexion in connexions_demandees:
             connexion_avec_client, infos_connexion = connexion.accept()
@@ -183,7 +232,7 @@ def main():
             boats1 = randomConfiguration(clients_connectes)
             boats2 = randomConfiguration(clients_connectes)
             game = Game(boats1, boats2)
-            print(" %s joueur(s) connecté(s)" % len(clients_connectes))
+            print("%s joueur(s) connecté(s)" % len(clients_connectes))
             
             
             #Pour commencer on defini le joueur du serveur à 0 
