@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 \usepackage[french]{babel}
 \title{Rapport projet de r\'eseau}
-\author{DELAR Emmanoe, RAKOTOARIJAONA Ezekiela}
+\author{DELAR Emmanoe, RAKOTOARIJAONA Camille}
 \begin{document}
 \maketitle
 \newpage
@@ -13,14 +13,14 @@
 Lors de ce projet, r\'ealis\'e en bin\^omes, nous avions pour objectif de d\'evelopper un jeu de bataille navale en r\'eseau. Pour cela, nous avons utilis\'e le language de programmation objet Python.
 On est parti du code source fourni par notre enseignant. Ce code nous permetait de jouer contre la machine uniquement. D\`es lors, nous avons d\^u l'am\'eliorer afin de pouvoir jouer \`a 1 contre 1 sur le r\'eseau.  
 
-\section{Description}
+\section{Fonctionnement du jeu}
 	 \subsection{Pr\'esentation du jeu}
 	 La bataille navale est un jeu de soci\'et\'e dans lequel deux joueurs doivent placer des « navires » sur une grille tenue secrète et tenter de « toucher » les navires adverses. Le gagnant est celui qui parvient à torpiller compl\`etement les navires de l'adversaire avant que tous les siens ne le soient..
 
 	 \subsection{Jouer contre la machine}
 	 Lors ce qu'on lance le programme, le jeu commence directement. On choisi la colonne et la ligne \`a viser. Quand c'est au tour de l'ordinateur, une fonction choisie des coordonn\'ees al\'eatoirement puis joue. Et ainsi de suite jusqu'\`a la fin de la partie. 
 
-\section{Passage en r\'eseau}
+\section{Structure du code}
 	\subsection{Partie serveur}
 	Contrairement \`a la partie contre l'ordinateur, en mode r\'eseau, les coordonn\'ees choisis par le client sont envoy\'es au serveur qui les retransmet au deuxi\`eme joueur connect\'e.
 	\`A l'aide du constructeur socket, nous avons alors cr\'e\'e un serveur de famille ipv6 pour une connexion TCP.
@@ -38,5 +38,6 @@ On est parti du code source fourni par notre enseignant. Ce code nous permetait 
 	Chaque information n\'ecessaire \`a l'initialisation d'une partie est envoy\'e par le serveur bit \`a bit et ainsi r\'ecup\'er\'e du c\^ot\'e client.
 	Il faut noter la n\'ecessit\'e \`a convertir les bytes recus en entier (int).
 
+\section{Extensions}
 
 \end{document}

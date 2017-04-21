@@ -1,9 +1,10 @@
 \select@language {french}
 \contentsline {section}{\numberline {1}Introduction}{3}
-\contentsline {section}{\numberline {2}Description}{3}
+\contentsline {section}{\numberline {2}Fonctionnement du jeu}{3}
 \contentsline {subsection}{\numberline {2.1}Pr\'esentation du jeu}{3}
 \contentsline {subsection}{\numberline {2.2}Jouer contre la machine}{3}
-\contentsline {section}{\numberline {3}Passage en r\'eseau}{3}
+\contentsline {section}{\numberline {3}Structure du code}{3}
 \contentsline {subsection}{\numberline {3.1}Partie serveur}{3}
 \contentsline {subsection}{\numberline {3.2}Partie client}{3}
 \contentsline {subsection}{\numberline {3.3}Protocole de communication}{4}
+\contentsline {section}{\numberline {4}Extensions}{4}
