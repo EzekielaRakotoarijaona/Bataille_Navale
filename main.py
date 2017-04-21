@@ -140,7 +140,7 @@ def main_client(x):
     	main_robot()
     	return
     #Création de la socket TCP/IP
-    client = socket.socket(family = socket.AF_INET6, type = socket.SOCK_STREAM, proto = 0, fileno = None)
+    client = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0, fileno = None)
 
     #On connecte la nouvelle socket client au port où le server "écoute"
     server_address = (x,7778)
@@ -201,11 +201,11 @@ def main():
         return
     
     #création de socket TCP
-    server = socket.socket(family = socket.AF_INET6, type = socket.SOCK_STREAM, proto = 0, fileno = None)
+    server = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0, fileno = None)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     #Bind la socket au port 7777
     print("Lancement du serveur sur le port 7777")
-    server.bind(('',7778))
+    server.bind(('192.168.0.25',7778))
     # "Ecoute" pour les demandes de connections entrantes
     server.listen(5)
 
