@@ -205,7 +205,7 @@ def main():
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     #Bind la socket au port 7777
     print("Lancement du serveur sur le port 7777")
-    server.bind(('192.168.0.25',7778))
+    server.bind(('0.0.0.0',7778))
     # "Ecoute" pour les demandes de connections entrantes
     server.listen(5)
 
