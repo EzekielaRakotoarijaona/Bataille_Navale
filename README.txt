@@ -16,4 +16,4 @@ Dans ce dossier vous trouverez un fichier main.py qui permet de lancer un serveu
 
 ### Autre
 
-Vous trouverez un fichier GIT.txt contenant le nom exact du projet.
+Vous trouverez un fichier GIT.txt contenant le lien github du projet. Ce projet est accessible et peut être cloné.
