@@ -135,8 +135,8 @@ def main_robot():
 		print("you loose !")
 
 def main_client(x):
-    choix = int(input ("Voulez vous jouer en réseau 1-Non 2-Oui: "))
-    if (choix == 1):
+    choix = (input ("Voulez vous jouer en réseau <N>on <O>ui ?"))
+    if (choix == 'O'):
     	main_robot()
     	return
     #Création de la socket TCP/IP
